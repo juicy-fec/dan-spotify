@@ -23,6 +23,10 @@ Track.init(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    artist_id: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
   },
   {
     sequelize,
