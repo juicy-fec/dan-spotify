@@ -1,5 +1,6 @@
 const nano = require('nano')('http://admin:gabor@localhost:5984');
 
+// eslint-disable-next-line consistent-return
 const testCouch = async () => {
   try {
     // await nano.db.destroy('artists');
@@ -12,7 +13,7 @@ const testCouch = async () => {
     const artists = nano.use('artists');
 
     const track = await tracks.get('10002');
-    const artist = await artists.get(track.artist_id, { });
+    const artist = await artists.get(track.artist_id);
 
     console.log(artist);
 

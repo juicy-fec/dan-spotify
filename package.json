@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "npm run server & npm run client",
     "test": "jest",
     "testwatch": "jest --watch --no-cache",
     "testcoverage": "jest --coverage --colors --detectOpenHandles",
@@ -68,6 +69,7 @@
     "mongoose": "^5.4.20",
     "morgan": "^1.9.1",
     "nano": "^8.0.1",
+    "newrelic": "^4.13.1",
     "node-fetch": "^2.3.0",
     "pg": "^7.10.0",
     "pg-hstore": "^2.3.2",

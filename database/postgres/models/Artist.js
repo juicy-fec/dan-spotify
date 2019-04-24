@@ -1,12 +1,21 @@
 const Sequelize = require('sequelize');
+const sequelize = require('../db');
+
+// const Artist = sequelize.define('artist', {
+//   name: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//   },
+// });
+
+// export default Artist;
 
 const { Model } = Sequelize;
 
-export default class Artist extends Model {}
+class Artist extends Model {}
 
 Artist.init(
   {
-    // attributes
     name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -15,6 +24,9 @@ Artist.init(
   {
     sequelize,
     modelName: 'artist',
-    // options
+    timestamps: false,
+    underscored: true,
   }
 );
+
+module.exports = Artist;

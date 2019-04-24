@@ -1,12 +1,41 @@
 const Sequelize = require('sequelize');
+const sequelize = require('../db');
+const Artist = require('./Artist');
+
+// const Track = sequelize.define('track', {
+//   name: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//   },
+//   image: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//   },
+//   playcount: {
+//     type: Sequelize.NUMBER,
+//     allowNull: false,
+//   },
+//   length: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//   },
+// });
+
+// Track.hasMany(Artist, {
+//   foreignKey: {
+//     name: 'artist_id',
+//     allowNull: false,
+//   },
+// });
+
+// export default Track;
 
 const { Model } = Sequelize;
 
-export default class Track extends Model {}
+class Track extends Model {}
 
 Track.init(
   {
-    // attributes
     name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -31,6 +60,11 @@ Track.init(
   {
     sequelize,
     modelName: 'track',
-    // options
+    timestamps: false,
+    underscored: true,
   }
 );
+
+Track.belongsTo(Artist, { foreignKey: 'artist_id' });
+
+module.exports = Track;

@@ -1,50 +1,47 @@
+require('newrelic');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const mongoose = require('mongoose');
-
-const Artist = require('../database/mongo/models/Artist');
-const Track = require('../database/mongo/models/Track');
-
-mongoose
-  .connect('mongodb://localhost:27017/top_tracks', { useNewUrlParser: true })
-  .then(() => console.log('Mongo connected'))
-  .catch(console.error);
+require('../database/postgres/db');
+const Artist = require('../database/postgres/models/Artist');
+const Track = require('../database/postgres/models/Track');
 
 const app = express();
 
 // Middleware Setup
 
 app.use(cors());
-app.use(express.static(`${__dirname}/../client/dist`));
-app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.static(`${__dirname}/../client/dist`));
 
 // Routes Setup
 
-app.post('/init', async (req, res) => {
-  try {
-    const newA = new Artist({ name: '123 ' });
-    const artist = await newA.save();
-
-    const newT = new Track({
-      name: '123',
-      image: '123',
-      playcount: 123,
-      length: '123',
-      artist_id: artist._id,
-    });
-
-    const track = await newT.save();
-
-    res.status(201).json({ artist, track });
-  } catch (err) {
-    res.status(500).json({ message: 'Could not save' });
-  }
+app.get('/test', (req, res) => {
+  Track.findOne({ where: { id: 12345 }, include: [Artist] })
+    .then(track => {
+      res.json(track);
+    })
+    .catch(console.error);
 });
 
-// Server Setup
+app.get('/data/toptracks', async (req, res) => {
+  Track.findAll({
+    order: [['playcount', 'DESC']],
+    limit: 10,
+    include: [Artist],
+  })
+    .then(data => {
+      console.log(data);
+      res.status(200).json(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res
+        .status(500)
+        .json({ error: true, message: 'Could not return top tracks.' });
+    });
+});
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => console.log(`Server running on PORT: ${PORT}...`));
