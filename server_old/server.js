@@ -7,8 +7,7 @@ const db = require('./db.js');
 
 const app = express();
 
-
-// Middelware Setup
+// Middleware Setup
 
 app.use(cors());
 app.use(express.static(`${__dirname}/../client/dist`));
@@ -19,18 +18,14 @@ app.use(morgan('dev'));
 
 app.get('/data/toptracks', (req, res) => {
   db.getTopTracks()
-    .then(results => res.json(results))
+    .then(results => {
+      res.json(results);
+    })
     .catch(console.log);
 });
 
-
 // Server Setup
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, (err) => {
-  if (err) console.log('Error connecting to server...');
-  else {
-    console.log(`Server running on PORT: ${PORT}...`);
-  }
-});
+app.listen(PORT, () => console.log(`Server running on PORT: ${PORT}...`));
